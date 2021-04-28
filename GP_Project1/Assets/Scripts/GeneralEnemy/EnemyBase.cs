@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
+public class EnemyBase : MonoBehaviour
 {
-    protected Rigidbody2D myBody;
-    protected EnemyAnimation myAnimMaster;
+    private Rigidbody2D myBody;
+    private EnemyAnimation myAnimMaster;
 
     [Header("Wall detection")]
     [SerializeField]
@@ -22,7 +22,7 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
     private Transform[] feetTransforms = null;
     private Collider2D[] groundCheckColliders = new Collider2D[1];
 
-    protected bool isGrounded = false;
+    private bool isGrounded = false;
 
 
     [Header("Jumping Detection")]
@@ -53,7 +53,9 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
 
     //bool isDead = false;
 
+    [Header("Enemy Fall")]
     bool canFall = false;
+    [SerializeField]
     float canFallToggleTime = 20;
 
     private AlertSystem myAlertSystem;
@@ -123,7 +125,7 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
         //transform.localEulerAngles = new Vector3( transform.rotation.x,transform.rotation.y+180,transform.rotation.z);
     }
 
-    protected void Jump() //Should Biters jump??
+    private void Jump() //Should Biters jump??
     {
         if (!isJumping)
         {
