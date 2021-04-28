@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour
 {
+    UIController myUI;
     ArmorSystem myArmor=null;
+    EnemyAnimation myAnim;
 
     [SerializeField][Range(0,float.MaxValue)]
     private float maxHealth;
@@ -14,6 +16,8 @@ public class HealthSystem : MonoBehaviour
     void Awake()
     {
         myArmor = GetComponent<ArmorSystem>();
+        myUI = GetComponent<UIController>();
+        myAnim = GetComponent<EnemyAnimation>();
         currentHealth = maxHealth;
     }
 
@@ -29,11 +33,13 @@ public class HealthSystem : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - damageTake, 0, maxHealth);
 
         if (currentHealth == 0) Die();
+
+        myUI.UpdateHealthUI(currentHealth, maxHealth);
     }
 
     private void Die()
     {
-        Destroy(gameObject);
+        myAnim.SetIsDead(true);
     }
 }
 

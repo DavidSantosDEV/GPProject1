@@ -104,7 +104,7 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
             }
         }
         myAnimMaster.SetIsGrounded(isGrounded);
-        
+        myAnimMaster.UpdateMovement(myBody.velocity.x);
     }
 
    

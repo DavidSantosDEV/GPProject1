@@ -12,8 +12,11 @@ public class EnemyAnimation : MonoBehaviour
     [SerializeField]
     private Color biterColor= Color.red;
 
-
+    //Hashed id
+    private int attackID;
+    private int horizontalMovementID;
     private int groundedAnimationID;
+    private int deadAnimationID;
 
     private void Awake()
     {
@@ -21,7 +24,10 @@ public class EnemyAnimation : MonoBehaviour
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
+        attackID = Animator.StringToHash("Attack");
+        horizontalMovementID = Animator.StringToHash("HorizontalMovement");
         groundedAnimationID = Animator.StringToHash("Grounded");
+        deadAnimationID = Animator.StringToHash("Dead");
     }
 
     public void ChangeToNormal()
@@ -39,4 +45,18 @@ public class EnemyAnimation : MonoBehaviour
         _animator.SetBool(groundedAnimationID,val);
     }
 
+    public void UpdateMovement(float horizontal)
+    {
+        _animator.SetFloat(horizontalMovementID, Mathf.Abs(horizontal));
+    }
+
+    public void SetIsDead(bool val)
+    {
+        _animator.SetBool(deadAnimationID, val);
+    }
+
+    public void PlayAttackAnimation()
+    {
+        _animator.SetTrigger(attackID);
+    }
 }
