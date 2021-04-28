@@ -219,6 +219,25 @@ public class EnemyBase : MonoBehaviour
         //isDead = true;
     }
 
+    #region Speed Stuff
+
+    public void SetSpeed(float newSpeed)
+    {
+        enemySpeed = newSpeed;
+    }
+
+    public void SetSpeed(float newSpeed, float EffectTime)
+    {
+        enemySpeed = newSpeed;
+        Invoke(nameof(ReturnOriginalSpeed), EffectTime);
+    }
+
+    public void ReturnOriginalSpeed()
+    {
+
+    }
+
+    #endregion
 
     #region Change Mode
 

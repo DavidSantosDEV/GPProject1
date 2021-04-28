@@ -14,6 +14,12 @@ public class HealthSystem : MonoBehaviour
 
     private float currentHealth=0;
 
+    [SerializeField][Range(1,short.MaxValue)]
+    private short maxBiteCount=2;
+
+    private short biteCount;
+
+
     void Awake()
     {
         _parent = GetComponent<EnemyBase>();
@@ -33,9 +39,13 @@ public class HealthSystem : MonoBehaviour
             if (damageTake == 0) return;
         }
 
+        biteCount++; //its right?
+
         currentHealth = Mathf.Clamp(currentHealth - damageTake, 0, maxHealth);
 
         if (currentHealth == 0) Die();
+
+        if (biteCount == maxBiteCount) _parent.ChangeToBiter();
 
         myUI.UpdateHealthUI(currentHealth, maxHealth);
     }

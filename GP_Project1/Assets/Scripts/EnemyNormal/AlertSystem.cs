@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class AlertSystem : MonoBehaviour
 {
-    EnemyBehaviour parent;
+    EnemyBase _parent;
 
     [SerializeField]
     private float timeAlert = 10;
 
-    public void SettupParent(EnemyBehaviour eb)
+    bool isAlert=false;
+
+    [SerializeField]
+    private float alertSpeed = 4;
+
+    private void Awake()
     {
-        parent = eb;
+        _parent = GetComponent<EnemyBase>();
     }
 
 
@@ -19,13 +24,29 @@ public class AlertSystem : MonoBehaviour
     {
         if(collision.CompareTag("Biter"))
         {
-
-            Invoke(nameof(CalmParent), timeAlert);
+            if (isAlert)
+            {
+                CancelInvoke(nameof(CalmParent));
+                Invoke(nameof(CalmParent), timeAlert); //Extending the alert time;
+            }
+            else
+            {
+                AlertParent();
+                Invoke(nameof(CalmParent), timeAlert);
+            }
+            
         }
     }
 
     private void CalmParent()
     {
+        isAlert = false;
+        _parent.ReturnOriginalSpeed();
+    }
 
+    private void AlertParent()
+    {
+        isAlert = true;
+        _parent.SetSpeed(alertSpeed);
     }
 }
