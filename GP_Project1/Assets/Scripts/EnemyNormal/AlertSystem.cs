@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AlertSystem : MonoBehaviour
@@ -12,7 +10,7 @@ public class AlertSystem : MonoBehaviour
     bool isAlert=false;
 
     [SerializeField]
-    private float alertSpeed = 4;
+    private float alertSpeed = 4, alertJumpCheckTime = 1;
 
     private void Awake()
     {
@@ -22,6 +20,7 @@ public class AlertSystem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!isActiveAndEnabled) return;
         if(collision.CompareTag("Biter"))
         {
             if (isAlert)
@@ -41,12 +40,18 @@ public class AlertSystem : MonoBehaviour
     private void CalmParent()
     {
         isAlert = false;
-        _parent.ReturnOriginalSpeed();
+        _parent.SetNormal();
+        //_parent.ReturnOriginalSpeed();
     }
 
     private void AlertParent()
     {
         isAlert = true;
-        _parent.SetSpeed(alertSpeed);
+        _parent.SetAlert(alertSpeed, alertJumpCheckTime);
+    }
+
+    public void CancelWorkings()
+    {
+        CancelInvoke(nameof(CalmParent));
     }
 }

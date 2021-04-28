@@ -46,9 +46,11 @@ public class EnemyBase : MonoBehaviour
     [Header("Movement")]
     [SerializeField]
     private float enemySpeed = 3;
-    
-    
+
+    //Original Values
+    private float originalJumpDetectSpeed;
     private float originalSpeed;
+
     private bool isJumping = false;
 
     //bool isDead = false;
@@ -75,6 +77,7 @@ public class EnemyBase : MonoBehaviour
     void Awake()
     {
         originalSpeed = enemySpeed;
+        originalJumpDetectSpeed = timeBetweenJumpChecks;
 
         myBody = GetComponent<Rigidbody2D>();
         if (!myBody) myBody = gameObject.AddComponent<Rigidbody2D>();
@@ -87,7 +90,6 @@ public class EnemyBase : MonoBehaviour
 
         InvokeRepeating(nameof(ToggleFall), canFallToggleTime, canFallToggleTime);
         StartMyRoutines();
-        //StartMyRoutines(); Not needed since game manager already does that
     }
 
     void ToggleFall()
@@ -95,16 +97,12 @@ public class EnemyBase : MonoBehaviour
         canFall = !canFall;
     }
 
-    private void Update()
-    {
-        
-        enemySpeed = isJumping ? 0 : originalSpeed;
-    }
-
     private void FixedUpdate()
     {
+        float speed= isJumping ? 0 : enemySpeed;
 
-        myBody.velocity = new Vector2(transform.right.x * enemySpeed, myBody.velocity.y);
+
+        myBody.velocity = new Vector2(transform.right.x * speed, myBody.velocity.y);
         isGrounded = CheckForGround();
         if ((!CheckForPlatforms() && !canFall) && Mathf.Abs(myBody.velocity.y)<0.01f)
         {
@@ -219,22 +217,38 @@ public class EnemyBase : MonoBehaviour
         //isDead = true;
     }
 
-    #region Speed Stuff
+    #region Alert Stuff
 
-    public void SetSpeed(float newSpeed)
+    public void SetAlert(float SpeedIncrease, float newTimeIntervalJump)
+    {
+        FlipCharacter();
+        SetSpeed(SpeedIncrease);
+        SetTimeBetweenChecks(newTimeIntervalJump);
+    }
+
+    public void SetNormal()
+    {
+        ReturnOriginalSpeed();
+        ReturnOriginalCheckTime();
+    }
+
+    private void SetTimeBetweenChecks(float newTime)
+    {
+        timeBetweenJumpChecks = newTime;
+    }
+
+    private void SetSpeed(float newSpeed)
     {
         enemySpeed = newSpeed;
     }
-
-    public void SetSpeed(float newSpeed, float EffectTime)
+    private void ReturnOriginalSpeed()
     {
-        enemySpeed = newSpeed;
-        Invoke(nameof(ReturnOriginalSpeed), EffectTime);
+        enemySpeed = originalSpeed;
     }
 
-    public void ReturnOriginalSpeed()
+    private void ReturnOriginalCheckTime()
     {
-
+        timeBetweenJumpChecks = originalJumpDetectSpeed;
     }
 
     #endregion
