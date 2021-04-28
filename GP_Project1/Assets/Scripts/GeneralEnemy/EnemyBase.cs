@@ -69,7 +69,7 @@ public class EnemyBase : MonoBehaviour
     {
         //StartCoroutine(nameof(CheckWallCycle));
         StartCoroutine(nameof(CheckForJump));
-       // StartCoroutine(nameof(CheckForWall));
+        StartCoroutine(nameof(CheckForWall));
     }
 
     void Awake()
@@ -104,9 +104,9 @@ public class EnemyBase : MonoBehaviour
     private void FixedUpdate()
     {
 
-        myBody.velocity = transform.right * enemySpeed;
+        myBody.velocity = new Vector2(transform.right.x * enemySpeed, myBody.velocity.y);
         isGrounded = CheckForGround();
-        if (CheckForWall() || (!CheckForPlatforms() && !canFall))
+        if ((!CheckForPlatforms() && !canFall) && Mathf.Abs(myBody.velocity.y)<0.01f)
         {
             FlipCharacter();
         }
@@ -127,7 +127,7 @@ public class EnemyBase : MonoBehaviour
 
     private void Jump() //Should Biters jump??
     {
-        if (!isJumping)
+        if (!isJumping && !canFall)
         {
             isJumping = true;
             myBody.AddForce(Vector2.up * jumpForce);
@@ -155,10 +155,10 @@ public class EnemyBase : MonoBehaviour
                 groundLayer) > 0;
     }
 
-    private bool CheckForWall()
+    private IEnumerator CheckForWall()
     {
-        /*while (isActiveAndEnabled)
-        {*/
+        while (isActiveAndEnabled)
+        {
             for (int i = 0; i < wallVectorsDetection.Length; i++)
             {
                 Debug.DrawLine(wallVectorsDetection[i].position,
@@ -171,12 +171,12 @@ public class EnemyBase : MonoBehaviour
                     //FlipCharacter();
                     
                     Debug.Log("WALL");
-                    return true;
+                    FlipCharacter();
                 }
             }
-            return false;
-            //yield return new WaitForSeconds(0.3f);
-        //}
+            
+            yield return new WaitForSeconds(0.3f);
+        }
         
     }
 
@@ -186,10 +186,12 @@ public class EnemyBase : MonoBehaviour
         while (isActiveAndEnabled)
         {
             yield return new WaitForSeconds(timeBetweenJumpChecks);
-
+            Debug.DrawLine(jumpVectorDetection.position,
+                jumpVectorDetection.position + jumpVectorDetection.up * jumpDetectionRange,Color.red,3);
             if (isGrounded && Physics2D.LinecastNonAlloc(jumpVectorDetection.position,
-                jumpVectorDetection.position + jumpVectorDetection.right * jumpDetectionRange, results, jumpDetectionLayerMask) > 0)
+                jumpVectorDetection.position + jumpVectorDetection.up * jumpDetectionRange, results, jumpDetectionLayerMask) > 0)
             {
+                Debug.Log("Wanna jump");
                 Jump();
             }
 

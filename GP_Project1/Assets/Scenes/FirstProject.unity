@@ -240,7 +240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 326428974}
   - component: {fileID: 326428975}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tileset_Rock_61 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -560,7 +560,7 @@ GameObject:
   m_Component:
   - component: {fileID: 615585882}
   - component: {fileID: 615585883}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -734,14 +734,17 @@ MonoBehaviour:
   - {fileID: 155418393}
   - {fileID: 708976306}
   jumpVectorDetection: {fileID: 1858611327}
-  jumpDetectionRange: 1
+  jumpDetectionRange: 2.2
   jumpDetectionLayerMask:
     serializedVersion: 2
     m_Bits: 256
   timeBetweenJumpChecks: 2
-  jumpForce: 2
-  resetJumpTime: 0.5
+  jumpForce: 650
+  resetJumpTime: 2
+  platformsEdgeVectorDetection: {fileID: 1591545088}
+  platformsEdgeDetectionRange: 1
   enemySpeed: 3
+  canFallToggleTime: 20
 --- !u!95 &660181316
 Animator:
   serializedVersion: 3
@@ -820,12 +823,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 660181314}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.62, y: -2.62, z: 0}
+  m_LocalPosition: {x: -8.47, y: -2.83, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1126294296}
   - {fileID: 1858611327}
   - {fileID: 885808200}
+  - {fileID: 1591545088}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -860,7 +864,7 @@ Rigidbody2D:
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 1
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!70 &660181321
@@ -1105,7 +1109,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 885808199}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.84, y: -0.25, z: 0}
+  m_LocalPosition: {x: 2.09, y: -0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 660181318}
@@ -1237,7 +1241,7 @@ GameObject:
   m_Component:
   - component: {fileID: 969641107}
   - component: {fileID: 969641108}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tileset_Rock_87
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1588,7 +1592,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1406968702}
   - component: {fileID: 1406968703}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Tileset_Rock_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1648,7 +1652,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 4642596664606366474, guid: 6299b0ad02be46648a2d83769361fa7a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1742,6 +1746,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1591545087
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1591545088}
+  m_Layer: 0
+  m_Name: PlatformEdge
+  m_TagString: Untagged
+  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1591545088
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591545087}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.55, y: -1.23, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 660181318}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1670500243
 GameObject:
   m_ObjectHideFlags: 0
@@ -1834,7 +1868,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1673468638}
   - component: {fileID: 1673468639}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tileset_Rock_61
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2110,7 +2144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1963147295}
   - component: {fileID: 1963147296}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tileset_Rock_88
   m_TagString: Untagged
   m_Icon: {fileID: 0}
