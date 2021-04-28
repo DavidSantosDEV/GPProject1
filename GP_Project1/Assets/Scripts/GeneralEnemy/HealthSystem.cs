@@ -7,17 +7,20 @@ public class HealthSystem : MonoBehaviour
     UIController myUI;
     ArmorSystem myArmor=null;
     EnemyAnimation myAnim;
+    EnemyBase _parent;
 
-    [SerializeField][Range(0,float.MaxValue)]
-    private float maxHealth;
+    [SerializeField][Range(0,400)]
+    private float maxHealth=100;
 
     private float currentHealth=0;
 
     void Awake()
     {
+        _parent = GetComponent<EnemyBase>();
         myArmor = GetComponent<ArmorSystem>();
         myUI = GetComponent<UIController>();
         myAnim = GetComponent<EnemyAnimation>();
+
         currentHealth = maxHealth;
     }
 
@@ -39,7 +42,9 @@ public class HealthSystem : MonoBehaviour
 
     private void Die()
     {
+        _parent.OnDeath();
         myAnim.SetIsDead(true);
     }
+
 }
 

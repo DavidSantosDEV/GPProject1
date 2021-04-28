@@ -46,7 +46,7 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
     private float originalSpeed;
     private bool isJumping = false;
 
-    
+    //bool isDead = false;
 
     bool canFall = false;
     float canFallToggleTime = 20;
@@ -87,13 +87,15 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
         canFall = !canFall;
     }
 
-    protected virtual void Update()
+    private void Update()
     {
+        
         enemySpeed = isJumping ? 0 : originalSpeed;
     }
 
-    protected virtual void FixedUpdate()
+    private void FixedUpdate()
     {
+
         myBody.velocity = transform.right * enemySpeed;
         isGrounded = CheckForGround();
         if (isGrounded)
@@ -194,7 +196,11 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
 
     #endregion
 
-
+    public void OnDeath()
+    {
+        enabled = false;
+        //isDead = true;
+    }
 
 
     #region Change Mode
