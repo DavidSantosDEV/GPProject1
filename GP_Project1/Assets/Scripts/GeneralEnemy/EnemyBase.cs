@@ -37,6 +37,11 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
     [SerializeField]
     private float jumpForce = 2, /*Bad game*/ resetJumpTime = 0.5f;
 
+    [Header("Platform detection")]
+    [SerializeField]
+    private Transform platformsEdgeVectorDetection = null;
+    [SerializeField]
+    private float platformsEdgeDetectionRange = 1f;
 
     [Header("Movement")]
     [SerializeField]
@@ -58,10 +63,11 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
     //Aux var
     private RaycastHit2D[] results = new RaycastHit2D[1];
 
-    protected virtual void StartMyRoutines()
+    private void StartMyRoutines()
     {
-        StartCoroutine(nameof(CheckWallCycle));
+        //StartCoroutine(nameof(CheckWallCycle));
         StartCoroutine(nameof(CheckForJump));
+       // StartCoroutine(nameof(CheckForWall));
     }
 
     void Awake()
@@ -98,13 +104,11 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
 
         myBody.velocity = transform.right * enemySpeed;
         isGrounded = CheckForGround();
-        if (isGrounded)
+        if (CheckForWall() || (!CheckForPlatforms() && !canFall))
         {
-            if (CheckForWall() || (!CheckForPlatforms() && !canFall))
-            {
-                FlipCharacter();
-            }
+            FlipCharacter();
         }
+        
         myAnimMaster.SetIsGrounded(isGrounded);
         myAnimMaster.UpdateMovement(myBody.velocity.x);
     }
@@ -113,7 +117,10 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
 
     private void FlipCharacter()
     {
-        transform.localEulerAngles = new Vector3( transform.rotation.x,transform.rotation.y+180,transform.rotation.z);
+        Vector3 target = transform.localEulerAngles;
+        target.y += 180;
+        transform.localEulerAngles = target;
+        //transform.localEulerAngles = new Vector3( transform.rotation.x,transform.rotation.y+180,transform.rotation.z);
     }
 
     protected void Jump() //Should Biters jump??
@@ -136,33 +143,39 @@ public class EnemyBase : MonoBehaviour //TODO CHANGE ALL PROTECTED TO PRIVATE
 
     private bool CheckForPlatforms()
     {
+        Debug.DrawLine(platformsEdgeVectorDetection.position,
+                platformsEdgeVectorDetection.position + platformsEdgeVectorDetection.right * platformsEdgeDetectionRange);
 
-        return false;
+        return Physics2D.LinecastNonAlloc(
+                platformsEdgeVectorDetection.position,
+                platformsEdgeVectorDetection.position + platformsEdgeVectorDetection.right * platformsEdgeDetectionRange,
+                results,
+                groundLayer) > 0;
     }
 
-    private IEnumerator CheckWallCycle()
+    private bool CheckForWall()
     {
-        while (isActiveAndEnabled)
-        {
-            bool hitWall = false;
+        /*while (isActiveAndEnabled)
+        {*/
+            for (int i = 0; i < wallVectorsDetection.Length; i++)
+            {
+                Debug.DrawLine(wallVectorsDetection[i].position,
+                    wallVectorsDetection[i].position + wallVectorsDetection[i].right * wallDetectRange);
 
-            if (hitWall) FlipCharacter();
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
-    protected bool CheckForWall()
-    {
-        for (int i = 0; i < wallVectorsDetection.Length; i++)
-        {
-            Debug.DrawLine(wallVectorsDetection[i].position,
-                wallVectorsDetection[i].position + wallVectorsDetection[i].right * wallDetectRange);
-
-            if (Physics2D.LinecastNonAlloc(wallVectorsDetection[i].position,
-                wallVectorsDetection[i].position + wallVectorsDetection[i].right * wallDetectRange,
-                results, wallLayer) > 0)
-                return true;
-        }
-        return false;
+                if (Physics2D.LinecastNonAlloc(wallVectorsDetection[i].position,
+                    wallVectorsDetection[i].position + wallVectorsDetection[i].right * wallDetectRange,
+                    results, wallLayer) > 0)
+                {
+                    //FlipCharacter();
+                    
+                    Debug.Log("WALL");
+                    return true;
+                }
+            }
+            return false;
+            //yield return new WaitForSeconds(0.3f);
+        //}
+        
     }
 
 
