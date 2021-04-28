@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private List<EnemyMaster> enemies= new List<EnemyMaster>();
+    private List<EnemyBase> enemies= new List<EnemyBase>();
 
     [SerializeField]
     private float timeChangeCycle = 30;
@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
         GameObject[] obj = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject gb in obj)
         {
-            EnemyMaster en = gb.GetComponent<EnemyMaster>();
+            EnemyBase en = gb.GetComponent<EnemyBase>();
             if(en) enemies.Add(en);
         }//Get the enemies first
 
@@ -35,9 +35,9 @@ public class GameManager : MonoBehaviour
 
     private void ClearAllBiters()
     {
-        foreach(EnemyMaster enemy in enemies)
+        foreach(EnemyBase enemy in enemies)
         {
-            enemy.ChangeToEnemy();
+            enemy.ChangeToNormal();
         }
         Debug.Log("Cleared");
     }

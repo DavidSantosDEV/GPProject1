@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BiterBehaviour : EnemyBase
+public class BiterBehaviour : MonoBehaviour
 {
 
     
@@ -13,15 +13,5 @@ public class BiterBehaviour : EnemyBase
         
     }
 
-    // Update is called once per frame
-    protected override void Update()
-    {
-        
-    }
-
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-        Debug.Log("Biter");
-    }
+   
 }
