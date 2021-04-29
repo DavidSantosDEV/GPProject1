@@ -10,7 +10,7 @@ public class AlertSystem : MonoBehaviour
     bool isAlert=false;
 
     [SerializeField]
-    private float alertSpeed = 4, alertJumpCheckTime = 1;
+    private float alertSpeed = 4, alertJumpCheckTime = 1, alertJumpCheckTimeMax =2;
 
     private void Awake()
     {

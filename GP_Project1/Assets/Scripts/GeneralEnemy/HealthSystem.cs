@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour
 {
-    UIController myUI;
+    VisualsBehaviour myUI;
     ArmorSystem myArmor=null;
     EnemyAnimation myAnim;
     EnemyBase _parent;
@@ -22,7 +22,7 @@ public class HealthSystem : MonoBehaviour
     {
         _parent = GetComponent<EnemyBase>();
         myArmor = GetComponent<ArmorSystem>();
-        myUI = GetComponent<UIController>();
+        myUI = GetComponent<VisualsBehaviour>();
         myAnim = GetComponent<EnemyAnimation>();
 
         currentHealth = maxHealth;

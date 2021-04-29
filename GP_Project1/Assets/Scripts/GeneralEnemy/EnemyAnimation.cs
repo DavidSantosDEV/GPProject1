@@ -47,6 +47,7 @@ public class EnemyAnimation : MonoBehaviour
 
     public void UpdateMovement(float horizontal)
     {
+        //Debug.Log(horizontal);
         _animator.SetFloat(horizontalMovementID, Mathf.Abs(horizontal));
     }
 
