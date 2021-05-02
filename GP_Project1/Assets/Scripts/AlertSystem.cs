@@ -12,7 +12,7 @@ public class AlertSystem : MonoBehaviour
     [SerializeField]
     private float alertSpeed = 4, alertJumpCheckTime = 1, alertJumpCheckTimeMax =2;
 
-    private void Awake()
+    private void Start()
     {
         _parent = GetComponent<EnemyBase>();
     }
@@ -47,7 +47,7 @@ public class AlertSystem : MonoBehaviour
     private void AlertParent()
     {
         isAlert = true;
-        _parent.SetAlert(alertSpeed, alertJumpCheckTime);
+        _parent.SetAlert(alertSpeed, alertJumpCheckTime,alertJumpCheckTimeMax);
     }
 
     public void CancelWorkings()

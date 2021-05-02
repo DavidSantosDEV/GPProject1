@@ -12,6 +12,11 @@ public class BiterBehaviour : MonoBehaviour
     [SerializeField]
     private float biteDamage = 20;
 
+    [SerializeField]
+    private float biteCoolDown=2;
+
+    bool canBite = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,19 +27,28 @@ public class BiterBehaviour : MonoBehaviour
     {
         if (isActiveAndEnabled)
         {
-            if (collision.CompareTag("Enemy"))
+            if (collision.CompareTag("Enemy") && canBite)
             {
+                Debug.Log("I wanna bite");
                 hurtThisGuy = null;
                 hurtThisGuy = collision.GetComponent<HealthSystem>();
                 if(hurtThisGuy)
                 EnactBite();
+                canBite = false;
+                Invoke(nameof(ResetBite), biteCoolDown);
             }
         }
+    }
+
+    private void ResetBite()
+    {
+        canBite = true;
     }
 
     private void EnactBite()
     {
         myAnimationMaster.PlayAttackAnimation();
+        DoBiteEffect();
     }
 
     public void DoBiteEffect()

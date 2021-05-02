@@ -24,6 +24,15 @@ public class GameManager : MonoBehaviour
         InvokeRepeating(nameof(ElectNewBiter), 0, timeChangeCycle);
     }
 
+    /*private void Update()
+    {
+        Debug.Log("w");
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Debug.Log("heee");
+            FindObjectOfType<HealthSystem>().TakeDamage(50);
+        }
+    }*/
 
     private void ElectNewBiter() { 
         ClearAllBiters();

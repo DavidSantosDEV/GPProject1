@@ -9,8 +9,8 @@ public class EnemyAnimation : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer=null;
 
-    [SerializeField]
-    private Color biterColor= Color.red;
+    //[SerializeField]
+    private Color biterColor= Color.red; //Unity is having a problem with custom colors for some reason, i can't use x.color = color var, i need to use x.color =new color(etc etc)
 
     //Hashed id
     private int attackID;
@@ -37,7 +37,7 @@ public class EnemyAnimation : MonoBehaviour
 
     public void ChangeToBiter()
     {
-        _spriteRenderer.color = biterColor;
+        _spriteRenderer.color = new Color(biterColor.r, biterColor.g, biterColor.b);
     }
 
     public void SetIsGrounded(bool val)

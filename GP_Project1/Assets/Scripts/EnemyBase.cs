@@ -7,6 +7,11 @@ public class EnemyBase : MonoBehaviour
     private Rigidbody2D myBody;
     private EnemyAnimation myAnimMaster;
 
+    [SerializeField]
+    private LayerMask enemyLayer, biterLayer;
+    [SerializeField][TagSelector]
+    private string enemyTag, biterTag;
+
     [Header("Wall detection")]
     [SerializeField]
     private Transform[] wallVectorsDetection;
@@ -33,7 +38,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]
     private LayerMask jumpDetectionLayerMask;
     [SerializeField]
-    private float timeBetweenJumpChecks = 2;
+    private float timeBetweenJumpChecks = 2,MaxTimeJumpChecks;
     [SerializeField]
     private float jumpForce = 2, /*Bad game*/ resetJumpTime = 0.5f;
 
@@ -49,6 +54,7 @@ public class EnemyBase : MonoBehaviour
 
     //Original Values
     private float originalJumpDetectSpeed;
+    private float originalMaxTimeJumpCheck;
     private float originalSpeed;
 
     private bool isJumping = false;
@@ -59,6 +65,11 @@ public class EnemyBase : MonoBehaviour
     bool canFall = false;
     [SerializeField]
     float canFallToggleTime = 20;
+
+    bool isAlert = false;
+    bool isIdle = false;
+
+    Collider2D mycol;
 
     private AlertSystem myAlertSystem;
     private EnemySocial myEnemySocial;
@@ -76,8 +87,11 @@ public class EnemyBase : MonoBehaviour
 
     void Awake()
     {
+        mycol = GetComponent<Collider2D>();
+
         originalSpeed = enemySpeed;
         originalJumpDetectSpeed = timeBetweenJumpChecks;
+        originalMaxTimeJumpCheck = MaxTimeJumpChecks;
 
         myBody = GetComponent<Rigidbody2D>();
         if (!myBody) myBody = gameObject.AddComponent<Rigidbody2D>();
@@ -87,6 +101,9 @@ public class EnemyBase : MonoBehaviour
         if (!myEnemySocial) myEnemySocial = gameObject.AddComponent<EnemySocial>();
         myAlertSystem = GetComponent<AlertSystem>();
         if (!myAlertSystem) gameObject.AddComponent<AlertSystem>();
+
+        myBiterBehaviour = GetComponent<BiterBehaviour>();
+        if (!myBiterBehaviour) myBiterBehaviour = gameObject.AddComponent<BiterBehaviour>();
 
         InvokeRepeating(nameof(ToggleFall), canFallToggleTime, canFallToggleTime);
         StartMyRoutines();
@@ -99,10 +116,12 @@ public class EnemyBase : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float speed= isJumping ? 0 : enemySpeed;
+        float speed= isJumping || isIdle ? 0 : enemySpeed;
 
 
         myBody.velocity = new Vector2(transform.right.x * speed, myBody.velocity.y);
+
+
         isGrounded = CheckForGround();
         if ((!CheckForPlatforms() && !canFall) && Mathf.Abs(myBody.velocity.y)<0.01f)
         {
@@ -168,7 +187,7 @@ public class EnemyBase : MonoBehaviour
                 {
                     //FlipCharacter();
                     
-                    Debug.Log("WALL");
+                    //Debug.Log("WALL");
                     FlipCharacter();
                 }
             }
@@ -183,7 +202,7 @@ public class EnemyBase : MonoBehaviour
     {
         while (isActiveAndEnabled)
         {
-            yield return new WaitForSeconds(timeBetweenJumpChecks);
+            yield return new WaitForSeconds(Random.Range(timeBetweenJumpChecks,MaxTimeJumpChecks));
             Debug.DrawLine(jumpVectorDetection.position,
                 jumpVectorDetection.position + jumpVectorDetection.up * jumpDetectionRange,Color.red,3);
             if (isGrounded && Physics2D.LinecastNonAlloc(jumpVectorDetection.position,
@@ -219,22 +238,42 @@ public class EnemyBase : MonoBehaviour
 
     #region Alert Stuff
 
-    public void SetAlert(float SpeedIncrease, float newTimeIntervalJump)
+    public void SetAlert(float SpeedIncrease, float newTimeIntervalJump, float newMaxTimeInterval)
     {
         FlipCharacter();
         SetSpeed(SpeedIncrease);
-        SetTimeBetweenChecks(newTimeIntervalJump);
+        SetTimeBetweenChecks(newTimeIntervalJump,newMaxTimeInterval);
+        isAlert = true;
+
+        if (isIdle)
+        {
+            CancelInvoke(nameof(ReturnRoutine));
+            StartCoroutine(nameof(CheckForJump));
+            isIdle = false;
+        }
     }
 
     public void SetNormal()
     {
         ReturnOriginalSpeed();
         ReturnOriginalCheckTime();
+        isAlert = false;
     }
 
-    private void SetTimeBetweenChecks(float newTime)
+    public bool GetIsAlert()
+    {
+        return isAlert;
+    }
+
+    public bool GetIsIdle()
+    {
+        return isIdle;
+    }
+
+    private void SetTimeBetweenChecks(float newTime, float maxtime)
     {
         timeBetweenJumpChecks = newTime;
+        MaxTimeJumpChecks = maxtime;
     }
 
     private void SetSpeed(float newSpeed)
@@ -249,22 +288,61 @@ public class EnemyBase : MonoBehaviour
     private void ReturnOriginalCheckTime()
     {
         timeBetweenJumpChecks = originalJumpDetectSpeed;
+        MaxTimeJumpChecks = originalMaxTimeJumpCheck;
     }
 
     #endregion
+
+    public void SetIdle(float time)
+    {
+        isIdle = true;
+
+        StopCoroutine(nameof(CheckForJump));
+
+        Invoke(nameof(ReturnRoutine), time);
+    }
+
+    private void ReturnRoutine()
+    {
+        FlipCharacter();
+        StartCoroutine(nameof(CheckForJump));
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Robot")
+        {
+            Physics2D.IgnoreCollision(collision.collider, mycol);
+        }
+    }
 
     #region Change Mode
 
     public void ChangeToBiter()
     {
         myAnimMaster.ChangeToBiter();
-        tag = "Biter";
-    }
 
+        myBiterBehaviour.enabled = true;
+
+        myAlertSystem.enabled = false;
+        myEnemySocial.enabled = false;
+
+        tag = biterTag;
+        gameObject.layer = LayerMask.NameToLayer("Biter");//biterLayer.ToString()); 
+    }
+    //Just to let know, unity just doesnt let me use the layer var AND the Layer.ToString together with nametoLayer
     public void ChangeToNormal()
     {
         myAnimMaster.ChangeToNormal();
-        tag = "Enemy";
+
+        myBiterBehaviour.enabled = false;
+
+        myAlertSystem.enabled = true;
+        myEnemySocial.enabled = true;
+
+        tag = enemyTag;
+        gameObject.layer = LayerMask.NameToLayer("Enemy");//enemyLayer.ToString());// LayerMask.NameToLayer( enemyLayer); doesnt work cause UNITAY
     }
 
     #endregion

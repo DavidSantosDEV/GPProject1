@@ -26,6 +26,8 @@ public class HealthSystem : MonoBehaviour
         myAnim = GetComponent<EnemyAnimation>();
 
         currentHealth = maxHealth;
+
+        myUI.UpdateHealthUI(currentHealth, maxHealth);
     }
 
     public void TakeDamage(float dmg)
