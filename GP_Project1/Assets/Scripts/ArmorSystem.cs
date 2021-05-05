@@ -10,6 +10,12 @@ public class ArmorSystem : MonoBehaviour
 
     private float currentArmor;
 
+    public float Armor
+    {
+        get => currentArmor;
+        private set => currentArmor = value;
+    }
+
     void Awake()
     {
         currentArmor = maxArmor;
@@ -18,9 +24,20 @@ public class ArmorSystem : MonoBehaviour
     public float CalculateDamage(float dmg)
     {
         if (currentArmor == 0) return dmg;
-        float damageReturn = Mathf.Abs(currentArmor - dmg);
-        currentArmor =Mathf.Clamp(currentArmor - dmg,0,maxArmor);
-        return damageReturn;
+        if (currentArmor - dmg > 0)
+        {
+            currentArmor = Mathf.Clamp(currentArmor - dmg, 0, maxArmor);
+            return 0;
+        }
+        else
+        {
+            float dam = Mathf.Abs(currentArmor - dmg);
+            currentArmor = 0;
+            return dam;
+        }
+        //float damageReturn = Mathf.Abs(currentArmor - dmg);
+        
+        //return damageReturn;
     }
 
     

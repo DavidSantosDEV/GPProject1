@@ -23,17 +23,27 @@ public class BiterBehaviour : MonoBehaviour
         myAnimationMaster = GetComponent<EnemyAnimation>();
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        AttackRoutine(collision);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
+    {
+        AttackRoutine(collision);
+    }
+
+    private void AttackRoutine(Collider2D collision)
     {
         if (isActiveAndEnabled)
         {
             if (collision.CompareTag("Enemy") && canBite)
             {
-                Debug.Log("I wanna bite");
+                //Debug.Log("I wanna bite");
                 hurtThisGuy = null;
                 hurtThisGuy = collision.GetComponent<HealthSystem>();
-                if(hurtThisGuy)
-                EnactBite();
+                if (hurtThisGuy)
+                    EnactBite();
                 canBite = false;
                 Invoke(nameof(ResetBite), biteCoolDown);
             }
@@ -48,7 +58,7 @@ public class BiterBehaviour : MonoBehaviour
     private void EnactBite()
     {
         myAnimationMaster.PlayAttackAnimation();
-        DoBiteEffect();
+        //DoBiteEffect();
     }
 
     public void DoBiteEffect()

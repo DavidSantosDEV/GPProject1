@@ -17,6 +17,8 @@ public class HealthSystem : MonoBehaviour
 
     private short biteCount;
 
+    bool isdead = false;
+
 
     void Awake()
     {
@@ -32,7 +34,9 @@ public class HealthSystem : MonoBehaviour
 
     public void TakeDamage(float dmg)
     {
+        if (isdead) return;
         float damageTake=dmg;
+
         if (myArmor)
         {
             damageTake = myArmor.CalculateDamage(dmg);
@@ -40,6 +44,7 @@ public class HealthSystem : MonoBehaviour
         }
 
         biteCount++; //its right?
+        Debug.Log("Bite count:" + biteCount + " Armor: " + myArmor.Armor);
 
         currentHealth = Mathf.Clamp(currentHealth - damageTake, 0, maxHealth);
 
@@ -52,6 +57,7 @@ public class HealthSystem : MonoBehaviour
 
     private void Die()
     {
+        isdead = true;
         _parent.OnDeath();
         myAnim.SetIsDead(true);
     }

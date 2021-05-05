@@ -69,6 +69,8 @@ public class EnemyBase : MonoBehaviour
     bool isAlert = false;
     bool isIdle = false;
 
+   //bool biter=false;
+
     Collider2D mycol;
 
     private AlertSystem myAlertSystem;
@@ -232,8 +234,8 @@ public class EnemyBase : MonoBehaviour
 
     public void OnDeath()
     {
-        enabled = false;
-        //isDead = true;
+        GameManager.Instance.EnemyDied(this,myAlertSystem);
+        //enabled = false;
     }
 
     #region Alert Stuff
@@ -311,7 +313,8 @@ public class EnemyBase : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Robot")
+        //if (tag == biterTag) return;
+        if (collision.gameObject.tag == enemyTag)
         {
             Physics2D.IgnoreCollision(collision.collider, mycol);
         }

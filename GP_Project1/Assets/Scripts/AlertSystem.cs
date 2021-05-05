@@ -10,19 +10,29 @@ public class AlertSystem : MonoBehaviour
     bool isAlert=false;
 
     [SerializeField]
-    private float alertSpeed = 4, alertJumpCheckTime = 1, alertJumpCheckTimeMax =2;
+    private float alertSpeed = 6, alertJumpCheckTime = 0.4f, alertJumpCheckTimeMax =1;
 
     private void Start()
     {
         _parent = GetComponent<EnemyBase>();
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        AlertRoutine(collision);
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        AlertRoutine(collision);
+    }
+
+    private void AlertRoutine(Collider2D collision)
+    {
         if (!isActiveAndEnabled) return;
-        if(collision.CompareTag("Biter"))
+        if (collision.CompareTag("Biter"))
         {
+            //Debug.Log(isAlert + " Its a biter!");
             if (isAlert)
             {
                 CancelInvoke(nameof(CalmParent));
@@ -33,7 +43,7 @@ public class AlertSystem : MonoBehaviour
                 AlertParent();
                 Invoke(nameof(CalmParent), timeAlert);
             }
-            
+
         }
     }
 
@@ -53,5 +63,6 @@ public class AlertSystem : MonoBehaviour
     public void CancelWorkings()
     {
         CancelInvoke(nameof(CalmParent));
+        CalmParent();
     }
 }

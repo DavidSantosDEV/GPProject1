@@ -317,6 +317,8 @@ GameObject:
   - component: {fileID: 2017884504}
   - component: {fileID: 2017884506}
   - component: {fileID: 5060047650669749680}
+  - component: {fileID: 8000810653231091309}
+  - component: {fileID: 6607226735984283482}
   m_Layer: 9
   m_Name: Enemy
   m_TagString: Enemy
@@ -443,7 +445,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 6884443177798480514}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 4ee7450b32002d0458bdeec2a776b350, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -582,6 +584,33 @@ MonoBehaviour:
   alertSpeed: 4
   alertJumpCheckTime: 1
   alertJumpCheckTimeMax: 2
+--- !u!114 &8000810653231091309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6884443177798480514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698135244447ef140b246419ae7fea70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  biteDamage: 20
+  biteCoolDown: 3
+--- !u!114 &6607226735984283482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6884443177798480514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b87ad8becac013f45a348752af22d386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxArmor: 30
 --- !u!1 &6884443178093510535
 GameObject:
   m_ObjectHideFlags: 0
