@@ -90,3 +90,20 @@ Received Import Request.
 Start importing Assets/Editor/TagSelectorPropertydrawer.cs using Guid(4cb1594606284034da6f3366845dd88d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '44b2ea6cdcb2efa6f6d6a458c71acfa3') in 0.008958 seconds
   Import took 0.012795 seconds .
 
+========================================================================
+Received Import Request.
+  Time since last request: 177.339665 seconds.
+  path: Assets/Animations/Enemy/ChomperController.controller
+  artifactKey: Guid(5570a5ceae895304da6624d68933a4bd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/Enemy/ChomperController.controller using Guid(5570a5ceae895304da6624d68933a4bd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1f819b37d394ec1daa4b6a28988bdab0') in 0.046560 seconds
+  Import took 0.050854 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.228513 seconds.
+  path: Assets/Animations/Enemy/ChomperController.controller
+  artifactKey: Guid(5570a5ceae895304da6624d68933a4bd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/Enemy/ChomperController.controller using Guid(5570a5ceae895304da6624d68933a4bd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1f819b37d394ec1daa4b6a28988bdab0') in 0.006460 seconds
+  Import took 0.011780 seconds .
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
